@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chi tiết món</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2 id="mon-title">Tên món</h2>
+    <img id="mon-img" class="food-img" src="" alt="Ảnh món ăn" />
+    <p class="price" id="mon-price">Giá: ...</p>
+    <p class="note" id="mon-note">...</p>
+
+    <div class="qty">
+      <button onclick="updateQty(-1)">-</button>
+      <span id="qty">1</span>
+      <button onclick="updateQty(1)">+</button>
+    </div>
+
+    <p style="font-size:0.95em;">Bàn số: <span id="so-ban">?</span></p>
+    <button class="order-btn" onclick="guiZalo()">📱 Gửi đơn qua Zalo</button>
+  </div>
+
+  <script>
+    const data = {
+      "pho-bo": {
+        title: "🍜 Phở Bò",
+        price: "40.000đ",
+        img: "https://i.imgur.com/kd7FZzB.jpg",
+        note: "🌶 Món cay nhẹ - Có thể bỏ hành"
+      },
+      "com-tam": {
+        title: "🍛 Cơm Tấm",
+        price: "35.000đ",
+        img: "https://i.imgur.com/mZBYEyx.jpg",
+        note: "🍳 Có trứng, chả – Không cay"
+      },
+      "bun-cha": {
+        title: "🥬 Bún Chả",
+        price: "45.000đ",
+        img: "https://i.imgur.com/JB3fx1m.jpg",
+        note: "🥗 Nhiều rau – Có thể ăn chay"
+      }
+    };
+
+    const params = new URLSearchParams(location.search);
+    const name = params.get("name");
+    const ban = params.get("ban") || "Không rõ";
+
+    if (data[name]) {
+      document.getElementById("mon-title").textContent = data[name].title;
+      document.getElementById("mon-img").src = data[name].img;
+      document.getElementById("mon-price").textContent = "Giá: " + data[name].price;
+      document.getElementById("mon-note").textContent = data[name].note;
+    }
+
+    document.getElementById("so-ban").textContent = ban;
+
+    let qty = 1;
+    function updateQty(n) {
+      qty = Math.max(1, qty + n);
+      document.getElementById("qty").textContent = qty;
+    }
+
+    function guiZalo() {
+      const mon = data[name];
+      const message = `Đặt ${mon.title} x${qty} (bàn ${ban})`;
+      const zaloLink = "https://zalo.me/0867673373?message=" + encodeURIComponent(message);
+      window.open(zaloLink, "_blank");
+    }
+  </script>
+</body>
+</html>
